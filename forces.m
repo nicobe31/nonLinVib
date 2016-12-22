@@ -49,7 +49,7 @@ sines = exp(arg);
 
 u  = Nt^(-1/2)*sum(sines,1);
 
-y = fft(u);
+y = fft(u); 
 fd = abs(y/Nt);
 f = samplingFreq*(0:(Nt/2))/Nt;
 p2 = fd(1:Nt/2+1);
