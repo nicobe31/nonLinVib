@@ -20,23 +20,27 @@ u = ampl*sin(arg);
 
 %% random
 Nt = 2^13;
-Nf = 1e5;
+Neff = 1e2;
 f0 = 5;
 f1 = 40;
 t0 = 0;
 t1 = 20;
+
 t = linspace(t0,t1,Nt);
 samplingFreq = 1/(t(2)-t(1)); %Hz
 
-df = samplingFreq/Nf;
-N1 = floor(f0/df);
-N2 = floor(f1/df);
+N = Neff*samplingFreq/(f1-f0);
+k0 = floor(f0*N/samplingFreq);
+k1 = ceil(f1*N/samplingFreq);
+% df = (f1-f0)/Neff;
+% N1 = floor(f0/df);
+% N2 = floor(f1/df);
 
-phik = (2*pi*rand(N2-N1+1,1))-pi;
+phik = (2*pi*rand(k1-k0+1,1))-pi;
 % Uk = zeros(N1,1);
 % Uk(1:N2) = ones(N2,1);
 
-arg1 = 1i*2*pi*[N1:N2]'*samplingFreq/Nf*t;
+arg1 = 1i*2*pi*[k0:k1]'*samplingFreq/N*t;
 % arg2 = 1i*diag(phik)*ones(size(arg1));
 arg2 = 1i*phik;
 % arg = arg1 + arg2;
@@ -47,13 +51,13 @@ arg = bsxfun(@plus, arg1, arg2);
 % sines = bsxfun(@times,factor1, factor2);
 sines = exp(arg);
 
-u  = Nt^(-1/2)*sum(sines,1);
+u  = real(N^(-1/2)*sum(sines,1));
 
 y = fft(u); 
 fd = abs(y/Nt);
-f = samplingFreq*(0:(Nt/2))/Nt;
 p2 = fd(1:Nt/2+1);
 p2(2:end-1) = 2*p2(2:end-1);
+f = samplingFreq*(0:(Nt/2))/Nt;
 plot(f,p2)
 
 
