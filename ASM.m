@@ -1,9 +1,17 @@
+function ASM(q)
+%%
+% ASM(q)
+%
+% Display the Acceleration Surface Method for the data 'q' given in
+% argument.
+%%
+
 clear all
 close all
 
 ratioWidth = 0.05; %ratio of the width of the slice
 colorSlice = ['bx'; 'gx'; 'rx'; 'cx'; 'mx'; 'yx'];
-q = rand(2,1000,3);
+% q = rand(2,1000,3);
 
 %% data preparation
 sizeQ = size(q);
@@ -62,5 +70,6 @@ while ~strcmpi(sliceStrg,'no')
     
     numberSlice = numberSlice + 1;
     sliceStrg = input(promp,'s');
+end
 end
         
