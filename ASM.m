@@ -1,45 +1,66 @@
 clear all
 close all
 
+ratioWidth = 0.05; %ratio of the width of the slice
+colorSlice = ['bx'; 'gx'; 'rx'; 'cx'; 'mx'; 'yx'];
 q = rand(2,1000,3);
 
+%% data preparation
 sizeQ = size(q);
 deltaQ = zeros(3,sizeQ(2));
 deltaQ(1,:) = q(1,:,1) - q(2,:,1);
 deltaQ(2,:) = q(1,:,2) - q(2,:,2);
-deltaQ(3,:) = q(1,:,3) - q(2,:,3);
+deltaQ(3,:) = -q(1,:,3);
 % peut etre changer, fct de ce que renvois le prof
 
+%% ASM 3D plot
 fig3d = figure('Name','ASM 3D');
 plot3(deltaQ(1,:),deltaQ(2,:),deltaQ(3,:),'ko');
-xlabel('x:distance');
-ylabel('y:velocity');
-zlabel('z:acceleration');
+xlabel('x: displacement');
+ylabel('y: velocity');
+zlabel('z: acceleration');
 
-promp = sprintf('Which do you want? axes-value (x-0) \n');
+%% Slice
+numberSlice = 1;
+promp = sprintf('What slice do you want? axes-value (ex: x-0.5) or no \n');
 sliceStrg = input(promp,'s');
-sliceAxeStrg = sliceStrg(1);
-switch sliceAxeStrg
-    case 'x'
-        sliceAxe = 1;
-    case 'y'
-        sliceAxe = 2;
-    case 'z'
-        sliceAxe = 3;
-    otherwise
-        sliceAxe = 2;
+while ~strcmpi(sliceStrg,'no')
+    % axe
+    sliceAxeStrg = sliceStrg(1);
+    switch sliceAxeStrg
+        case 'x'
+            sliceAxe = 1;
+        case 'y'
+            sliceAxe = 2;
+        case 'z'
+            sliceAxe = 3;
+        otherwise
+            sliceAxe = 2;
+    end
+    
+    % value
+    sliceValue = str2double(sliceStrg(3:end));
+    widthSliceHalf = ratioWidth*(max(deltaQ(sliceAxe,:)) - min(deltaQ(sliceAxe,:)))/2;
+    
+    % find indice in deltaQ that are in the slice
+    iSlice = find((deltaQ(sliceAxe,:)>(sliceValue-widthSliceHalf))&(deltaQ(sliceAxe,:)<(sliceValue+widthSliceHalf)));
+    
+    % plot
+    figure(fig3d);
+    hold on
+    plot3(deltaQ(1,iSlice),deltaQ(2,iSlice),deltaQ(3,iSlice),colorSlice(mod(numberSlice,6),:));
+
+    axePlot2d = 1:3;
+    axePlot2d(sliceAxe) = [];
+    axeName = {'Displacement';'Velocity';'Acceleration'};
+    fig2d = figure('Name','ASM slice');
+    plot(deltaQ(axePlot2d(1),iSlice),deltaQ(axePlot2d(2),iSlice),'ko');
+    titleStrg = sprintf('Slice number %i', numberSlice);
+    title(titleStrg);
+    xlabel(axeName{axePlot2d(1)});
+    ylabel(axeName{axePlot2d(2)});
+    
+    numberSlice = numberSlice + 1;
+    sliceStrg = input(promp,'s');
 end
-sliceValue = str2double(sliceStrg(3:end));
-
-ratioWidth = 0.05;
-widthSliceHalf = ratioWidth*(max(deltaQ(sliceAxe,:)) - min(deltaQ(sliceAxe,:)))/2;
-iSlice = find((deltaQ(sliceAxe,:)>(sliceValue-widthSliceHalf))&(deltaQ(sliceAxe,:)<(sliceValue+widthSliceHalf)));
-
-hold on
-plot3(deltaQ(1,iSlice),deltaQ(2,iSlice),deltaQ(3,iSlice),'r*');
-
-axePlot2d = 1:3;
-axePlot2d(sliceAxe) = [];
-figure('Name','ASM slice')
-plot(deltaQ(axePlot2d(1),iSlice),deltaQ(axePlot2d(2),iSlice),'ko');
         
