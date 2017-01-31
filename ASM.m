@@ -1,13 +1,11 @@
-function ASM(q)
+function ASM(q,index)
 %%
 % ASM(q)
 %
 % Display the Acceleration Surface Method for the data 'q' given in
 % argument.
-%%
 
-clear all
-close all
+%%
 
 ratioWidth = 0.05; %ratio of the width of the slice
 colorSlice = ['bx'; 'gx'; 'rx'; 'cx'; 'mx'; 'yx'];
@@ -16,9 +14,17 @@ colorSlice = ['bx'; 'gx'; 'rx'; 'cx'; 'mx'; 'yx'];
 %% data preparation
 sizeQ = size(q);
 deltaQ = zeros(3,sizeQ(2));
-deltaQ(1,:) = q(1,:,1) - q(2,:,1);
-deltaQ(2,:) = q(1,:,2) - q(2,:,2);
+testIndex = find(index==0,1);
+if isempty(testIndex);
+    deltaQ(1,:) = q(index(1),:,1) - q(index(2),:,1);
+    deltaQ(2,:) = q(index(1),:,2) - q(index(2),:,2);
+else
+    index(testIndex) = [];
+    deltaQ(1,:) = q(index(1),:,1);
+    deltaQ(2,:) = q(index(1),:,2);
+end    
 deltaQ(3,:) = -q(1,:,3);
+    
 % peut etre changer, fct de ce que renvois le prof
 
 %% ASM 3D plot
