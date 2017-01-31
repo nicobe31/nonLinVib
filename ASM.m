@@ -3,7 +3,9 @@ function ASM(q,index)
 % ASM(q)
 %
 % Display the Acceleration Surface Method for the data 'q' given in
-% argument.
+% argument. index is a matrix containing the indice between which the
+% acceleration surface is computed. Set one of the index to 0 to compute
+% the AS between the dof and the wall
 
 %%
 
