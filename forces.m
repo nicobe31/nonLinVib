@@ -40,6 +40,8 @@ switch type
     arg = arg1 + arg2 + phi0;
 
     F = ampl*sin(arg);
+    
+    t = seriet;
 
     case 'multisine' 
     %% multisine with random phase
