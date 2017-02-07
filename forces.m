@@ -28,7 +28,7 @@ switch type
     
         % parameters
         phi0 = 0; %initial phase angle degree
-        samplingFreq = 100; %Hz
+        samplingFreq = 300; %Hz
 
     phi0 = phi0*pi/180; % °-> rad
     t0 = 0;
@@ -85,12 +85,12 @@ switch type
         t((rep-1)*serieNt + 1: rep*serieNt) = seriet + t((rep-1)*serieNt) + dt;
     end
 % 
-% y = fft(u); 
-% fd = abs(y/Nt);
-% p2 = fd(1:Nt/2+1);
-% p2(2:end-1) = 2*p2(2:end-1);
-% f = samplingFreq*(0:(Nt/2))/Nt;
-% plot(f,p2)
+y = fft(F); 
+fd = abs(y/Nt);
+p2 = fd(1:Nt/2+1);
+p2(2:end-1) = 2*p2(2:end-1);
+f = samplingFreq*(0:(Nt/2))/Nt;
+plot(f,p2)
 
 end
 
